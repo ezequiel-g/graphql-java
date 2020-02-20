@@ -15,7 +15,7 @@ public class LinkFilter {
         return descriptionContains;
     }
 
-    public void setDescriptionContains(String descriptionContains) {
+    public void setDescriptionContains(final String descriptionContains) {
         this.descriptionContains = descriptionContains;
     }
 
@@ -24,7 +24,7 @@ public class LinkFilter {
         return urlContains;
     }
 
-    public void setUrlContains(String urlContains) {
+    public void setUrlContains(final String urlContains) {
         this.urlContains = urlContains;
     }
 }

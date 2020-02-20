@@ -10,16 +10,16 @@ public class VoteResolver implements GraphQLResolver<Vote> {
     private final LinkRepository linkRepository;
     private final UserRepository userRepository;
 
-    VoteResolver(LinkRepository linkRepository, UserRepository userRepository) {
+    VoteResolver(final LinkRepository linkRepository, final UserRepository userRepository) {
         this.linkRepository = linkRepository;
         this.userRepository = userRepository;
     }
 
-    public User user(Vote vote) {
+    public User user(final Vote vote) {
         return userRepository.findById(vote.getUserId());
     }
     
-    public Link link(Vote vote) {
+    public Link link(final Vote vote) {
         return linkRepository.findById(vote.getLinkId());
     }
 }

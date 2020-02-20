@@ -9,11 +9,11 @@ public class LinkResolver implements GraphQLResolver<Link> {
     
     private final UserRepository userRepository;
 
-    LinkResolver(UserRepository userRepository) {
+    LinkResolver(final UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public User postedBy(Link link) {
+    public User postedBy(final Link link) {
         if (link.getUserId() == null) {
             return null;
         }

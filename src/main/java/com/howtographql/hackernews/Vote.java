@@ -11,11 +11,11 @@ public class Vote {
     private final String userId;
     private final String linkId;
 
-    public Vote(ZonedDateTime createdAt, String userId, String linkId) {
+    public Vote(final ZonedDateTime createdAt, final String userId, final String linkId) {
         this(null, createdAt, userId, linkId);
     }
 
-    public Vote(String id, ZonedDateTime createdAt, String userId, String linkId) {
+    public Vote(final String id, final ZonedDateTime createdAt, final String userId, final String linkId) {
         this.id = id;
         this.createdAt = createdAt;
         this.userId = userId;

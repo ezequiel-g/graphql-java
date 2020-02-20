@@ -15,7 +15,7 @@ public class AuthContext extends GraphQLContext {
     
     private final User user;
     
-    public AuthContext(User user, Optional<HttpServletRequest> request, Optional<HttpServletResponse> response) {
+    public AuthContext(final User user, final Optional<HttpServletRequest> request, final Optional<HttpServletResponse> response) {
         super(request, response);
         this.user = user;
     }

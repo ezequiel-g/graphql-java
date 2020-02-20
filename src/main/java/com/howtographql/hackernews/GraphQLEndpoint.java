@@ -1,10 +1,6 @@
 package com.howtographql.hackernews;
 
 
-import com.coxautodev.graphql.tools.SchemaParser;
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,6 +8,10 @@ import java.util.stream.Collectors;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.coxautodev.graphql.tools.SchemaParser;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 
 import graphql.ExceptionWhileDataFetching;
 import graphql.GraphQLError;
@@ -25,12 +25,14 @@ import graphql.servlet.SimpleGraphQLServlet;
 @WebServlet(urlPatterns = "/graphql")
 public class GraphQLEndpoint extends SimpleGraphQLServlet {
 
-    private static final LinkRepository linkRepository;
+	private static final long serialVersionUID = 417729619339379585L;
+	
+	private static final LinkRepository linkRepository;
     private static final UserRepository userRepository;
     private static final VoteRepository voteRepository;
 
     static {
-        MongoDatabase mongo = new MongoClient().getDatabase("hackernews");
+        final MongoDatabase mongo = new MongoClient().getDatabase("hackernews");
         linkRepository = new LinkRepository(mongo.getCollection("links"));
         userRepository = new UserRepository(mongo.getCollection("users"));
         voteRepository = new VoteRepository(mongo.getCollection("votes"));
@@ -55,7 +57,7 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
     }
 
     @Override
-    protected GraphQLContext createContext(Optional<HttpServletRequest> request, Optional<HttpServletResponse> response) {
+    protected GraphQLContext createContext(final Optional<HttpServletRequest> request, final Optional<HttpServletResponse> response) {
         User user = request
                 .map(req -> req.getHeader("Authorization"))
                 .filter(id -> !id.isEmpty())
@@ -66,7 +68,7 @@ public class GraphQLEndpoint extends SimpleGraphQLServlet {
     }
 
     @Override
-    protected List<GraphQLError> filterGraphQLErrors(List<GraphQLError> errors) {
+    protected List<GraphQLError> filterGraphQLErrors(final List<GraphQLError> errors) {
         return errors.stream()
                 .filter(e -> e instanceof ExceptionWhileDataFetching || super.isClientError(e))
                 .map(e -> e instanceof ExceptionWhileDataFetching ? new SanitizedError((ExceptionWhileDataFetching) e) : e)

@@ -10,11 +10,11 @@ public class User {
     private final String email;
     private final String password;
 
-    public User(String name, String email, String password) {
+    public User(final String name, final String email, final String password) {
         this(null, name, email, password);
     }
     
-    public User(String id, String name, String email, String password) {
+    public User(final String id, final String name, final String email, final String password) {
         this.id = id;
         this.name = name;
         this.email = email;

@@ -1,51 +1,57 @@
 package com.howtographql.hackernews;
 
-import com.mongodb.client.MongoCollection;
+import static com.mongodb.client.model.Filters.eq;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import static com.mongodb.client.model.Filters.eq;
+import com.mongodb.client.MongoCollection;
 
 /**
  * Manages user persistence
  */
 public class UserRepository {
 
-    private final MongoCollection<Document> users;
+	private static final String UUID = "_id";
+	private static final String NAME = "name";
+	private static final String EMAIL = "email";
+	private static final String PASSWORD = "password";
+	
+	private final MongoCollection<Document> users;
 
-    public UserRepository(MongoCollection<Document> users) {
+    public UserRepository(final MongoCollection<Document> users) {
         this.users = users;
     }
     
-    public User findByEmail(String email) {
-        Document doc = users.find(eq("email", email)).first();
+    public User findByEmail(final String email) {
+        final Document doc = users.find(eq(EMAIL, email)).first();
         return user(doc);
     }
 
-    public User findById(String id) {
-        Document doc = users.find(eq("_id", new ObjectId(id))).first();
+    public User findById(final String id) {
+        final Document doc = users.find(eq(UUID, new ObjectId(id))).first();
         return user(doc);
     }
     
-    public User saveUser(User user) {
-        Document doc = new Document();
-        doc.append("name", user.getName());
-        doc.append("email", user.getEmail());
-        doc.append("password", user.getPassword());
+    public User saveUser(final User user) {
+        final Document doc = new Document();
+        doc.append(NAME, user.getName());
+        doc.append(EMAIL, user.getEmail());
+        doc.append(PASSWORD, user.getPassword());
         users.insertOne(doc);
+        
         return new User(
-                doc.get("_id").toString(),
+                doc.get(UUID).toString(),
                 user.getName(),
                 user.getEmail(),
                 user.getPassword());
     }
     
-    private User user(Document doc) {
+    private User user(final Document doc) {
         return new User(
-                doc.get("_id").toString(),
-                doc.getString("name"),
-                doc.getString("email"),
-                doc.getString("password"));
+                doc.get(UUID).toString(),
+                doc.getString(NAME),
+                doc.getString(EMAIL),
+                doc.getString(PASSWORD));
     }
 }

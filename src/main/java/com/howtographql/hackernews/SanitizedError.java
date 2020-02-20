@@ -9,7 +9,7 @@ import graphql.ExceptionWhileDataFetching;
  */
 public class SanitizedError extends ExceptionWhileDataFetching {
     
-    public SanitizedError(ExceptionWhileDataFetching inner) {
+    public SanitizedError(final ExceptionWhileDataFetching inner) {
         super(inner.getException());
     }
 

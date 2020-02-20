@@ -1,61 +1,66 @@
 package com.howtographql.hackernews;
 
-import com.mongodb.client.MongoCollection;
-
-import org.bson.Document;
+import static com.mongodb.client.model.Filters.eq;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mongodb.client.model.Filters.eq;
+import org.bson.Document;
+
+import com.mongodb.client.MongoCollection;
 
 /**
  * Manages vote persistence
  */
 public class VoteRepository {
 
-    private final MongoCollection<Document> votes;
+    private static final String UUID = "_id";
+    private static final String USER_ID = "userId";
+    private static final String LINK_ID = "linkId";
+    private static final String CREATED_AT = "createdAt";
+    
+	private final MongoCollection<Document> votes;
 
-    VoteRepository(MongoCollection<Document> votes) {
+    VoteRepository(final MongoCollection<Document> votes) {
         this.votes = votes;
     }
 
-    public List<Vote> findByUserId(String userId) {
-        List<Vote> list = new ArrayList<>();
-        for (Document doc : votes.find(eq("userId", userId))) {
+    public List<Vote> findByUserId(final String userId) {
+        final List<Vote> list = new ArrayList<>();
+        for (final Document doc : votes.find(eq(USER_ID, userId))) {
             list.add(vote(doc));
         }
         return list;
     }
 
-    public List<Vote> findByLinkId(String linkId) {
-        List<Vote> list = new ArrayList<>();
-        for (Document doc : votes.find(eq("linkId", linkId))) {
+    public List<Vote> findByLinkId(final String linkId) {
+        final List<Vote> list = new ArrayList<>();
+        for (final Document doc : votes.find(eq(LINK_ID, linkId))) {
             list.add(vote(doc));
         }
         return list;
     }
 
     public Vote saveVote(Vote vote) {
-        Document doc = new Document();
-        doc.append("userId", vote.getUserId());
-        doc.append("linkId", vote.getLinkId());
-        doc.append("createdAt", Scalars.dateTime.getCoercing().serialize(vote.getCreatedAt()));
+        final Document doc = new Document();
+        doc.append(USER_ID, vote.getUserId());
+        doc.append(LINK_ID, vote.getLinkId());
+        doc.append(CREATED_AT, Scalars.dateTime.getCoercing().serialize(vote.getCreatedAt()));
         votes.insertOne(doc);
         return new Vote(
-                doc.get("_id").toString(),
+                doc.get(UUID).toString(),
                 vote.getCreatedAt(),
                 vote.getUserId(),
                 vote.getLinkId());
     }
     
-    private Vote vote(Document doc) {
+    private Vote vote(final Document doc) {
         return new Vote(
-                doc.get("_id").toString(),
-                ZonedDateTime.parse(doc.getString("createdAt")),
-                doc.getString("userId"),
-                doc.getString("linkId")
+                doc.get(UUID).toString(),
+                ZonedDateTime.parse(doc.getString(CREATED_AT)),
+                doc.getString(USER_ID),
+                doc.getString(LINK_ID)
         );
     }
 }
