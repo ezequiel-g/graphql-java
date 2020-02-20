@@ -1,4 +1,10 @@
+# Intellij
 *.iml
 .idea
 .DS_Store
 target
+
+# ECLIPSE
+.settings/
+.classpath
+.project
